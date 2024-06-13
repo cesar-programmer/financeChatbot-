@@ -3,10 +3,9 @@ import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-# Añadir el directorio raíz al sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from model import final_result  # Ahora puedes importar final_result
+from model import final_result
 
 def document_to_dict(document):
     return {
@@ -18,7 +17,7 @@ def document_to_dict(document):
 
 
 app = Flask(__name__)
-CORS(app)  # Habilitar CORS para permitir solicitudes desde el frontend
+CORS(app)
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -27,7 +26,6 @@ def chat():
         response = final_result(user_input)
         
         if 'source_documents' in response and isinstance(response['source_documents'], list):
-            # Convertir cada documento a un diccionario
             response['source_documents'] = [document_to_dict(doc) for doc in response['source_documents']]
         print(response)
         return jsonify(response)
@@ -36,5 +34,4 @@ def chat():
 
 
 if __name__ == '__main__':
-    # Configurar el servidor para ejecutarse en el puerto 8000
     app.run(debug=True, port=5000)
